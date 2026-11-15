@@ -1,7 +1,4 @@
 venv/
+.venv/
 __pycache__/
-*.pyc
 .git/
-mlruns/
-.ipynb_checkpoints/
-.vscode/
