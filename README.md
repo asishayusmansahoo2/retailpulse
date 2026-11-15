@@ -15,7 +15,7 @@ Retail analytics platform with a Streamlit dashboard.
     streamlit run dashboard/app.py
 
 ## Live demo
-(add URL here)
+https://retailpulse-6pszmt2n6gp9zgjc8ynqsb.streamlit.app
 
 ## Author
 Asish Ayusman Sahoo
