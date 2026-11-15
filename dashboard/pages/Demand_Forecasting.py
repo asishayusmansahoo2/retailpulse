@@ -1,4 +1,3 @@
-# dashboard/pages/1__Demand_Forecasting.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -46,7 +45,10 @@ def load_model():
         return m
 
 daily_sales = load_data()
-prophet_model = load_model()
+try:
+    prophet_model = load_model()
+except Exception:
+    prophet_model = None
 
 # ==========================================
 # 2. Generate Predictions
@@ -56,9 +58,12 @@ prophet_df = daily_sales[['date', 'total_amount']].rename(columns={'date': 'ds',
 
 # Create future dataframe for last 30 days (for evaluation)
 last_date = prophet_df['ds'].max()
-future_eval = prophet_model.make_future_dataframe(periods=30)
-forecast_eval = prophet_model.predict(future_eval)
-
+if prophet_model is not None:
+    future_eval = prophet_model.make_future_dataframe(periods=30)
+    forecast_eval = prophet_model.predict(future_eval)
+else:
+    st.info("Showing saved forecast results (Prophet engine unavailable on this server).")
+    forecast_eval = pd.read_csv('data/forecast_eval.csv', parse_dates=['ds'])
 # Extract the last 30 days of predictions and actuals
 test_forecast = forecast_eval[forecast_eval['ds'] > last_date - pd.Timedelta(days=29)].copy()
 test_actual = prophet_df[prophet_df['ds'] > last_date - pd.Timedelta(days=29)].copy()
