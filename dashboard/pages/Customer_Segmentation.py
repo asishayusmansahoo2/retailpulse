@@ -87,7 +87,7 @@ with col3:
     st.metric("Avg Frequency", f"{filtered_df['frequency'].mean():.1f}")
 with col4:
     avg_risk = filtered_df['churn_probability'].mean() * 100
-    st.metric("Avg Churn Risk", f"{avg_risk:.1f}%")
+    st.metric("Avg Churn Risk Score", f"{avg_risk:.1f}%")
 
 st.markdown("---")
 
@@ -167,7 +167,8 @@ st.markdown("---")
 # ==========================================
 # Top 10 At-Risk Customers
 # ==========================================
-st.subheader("🚨 Top 10 At-Risk Customers (High Churn Probability)")
+st.subheader("🚨 Top 10 At-Risk Customers (Highest Risk Score)")
+st.caption("Risk score is a rule-based indicator (recency and customer history), not a trained model prediction. See reports/Churn_Leakage_Findings.md.")
 st.write("Target these customers with retention campaigns to maximize ROI.")
 
 # Get top 10 highest churn probability
