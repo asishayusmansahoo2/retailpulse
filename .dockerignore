@@ -2,3 +2,8 @@ venv/
 .venv/
 __pycache__/
 .git/
+mlruns/
+lightning_logs/
+mlflow.db
+monitoring/
+k8s/
