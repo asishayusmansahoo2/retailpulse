@@ -1,0 +1,29 @@
+services:
+  exporter:
+    image: python:3.11-slim
+    working_dir: /app
+    command: sh -c "pip install --no-cache-dir -q pandas prometheus-client && python exporter.py"
+    environment:
+      DATA_DIR: /data
+    volumes:
+      - ./exporter.py:/app/exporter.py:ro
+      - ../data:/data:ro
+    ports:
+      - "8000:8000"
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - exporter
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
