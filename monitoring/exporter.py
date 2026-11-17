@@ -5,7 +5,9 @@ import pandas as pd
 from prometheus_client import Gauge, start_http_server
 
 DATA = os.environ.get("DATA_DIR", "data")
-mape_g = Gauge("retailpulse_forecast_mape_percent", "Forecast MAPE on the last 30 days (percent)")
+mape_g = Gauge(
+    "retailpulse_forecast_mape_percent", "Forecast MAPE on the last 30 days (percent)"
+)
 cust_g = Gauge("retailpulse_customers_total", "Customers in the segmented table")
 seg_g = Gauge("retailpulse_segment_customers", "Customers per segment", ["segment"])
 tx_g = Gauge("retailpulse_transactions_total", "Rows in transactions_cleaned.csv")

@@ -3,21 +3,32 @@ import streamlit as st
 
 import pandas as pd
 
+
 def _kpis():
-    t = pd.read_csv('data/transactions_cleaned.csv', parse_dates=['date'])
-    end = t['date'].max()
-    cur = t[t['date'] > end - pd.Timedelta(days=30)]
-    prev = t[(t['date'] > end - pd.Timedelta(days=60)) & (t['date'] <= end - pd.Timedelta(days=30))]
-    d = pd.read_csv('data/daily_sales_prepared.csv', parse_dates=['date'])
-    fc = pd.read_csv('data/forecast_eval.csv', parse_dates=['ds'])
-    last = d['date'].max()
-    a = d[d['date'] > last - pd.Timedelta(days=29)][['date', 'total_amount']]
-    a = a.rename(columns={'date': 'ds', 'total_amount': 'y'})
-    m = a.merge(fc[['ds', 'yhat']], on='ds')
-    mape = (abs(m['y'] - m['yhat']) / m['y']).mean() * 100
-    return (cur['total_amount'].sum(), prev['total_amount'].sum(),
-            cur['customer_id'].nunique(), prev['customer_id'].nunique(),
-            len(cur), len(prev), mape)
+    t = pd.read_csv("data/transactions_cleaned.csv", parse_dates=["date"])
+    end = t["date"].max()
+    cur = t[t["date"] > end - pd.Timedelta(days=30)]
+    prev = t[
+        (t["date"] > end - pd.Timedelta(days=60))
+        & (t["date"] <= end - pd.Timedelta(days=30))
+    ]
+    d = pd.read_csv("data/daily_sales_prepared.csv", parse_dates=["date"])
+    fc = pd.read_csv("data/forecast_eval.csv", parse_dates=["ds"])
+    last = d["date"].max()
+    a = d[d["date"] > last - pd.Timedelta(days=29)][["date", "total_amount"]]
+    a = a.rename(columns={"date": "ds", "total_amount": "y"})
+    m = a.merge(fc[["ds", "yhat"]], on="ds")
+    mape = (abs(m["y"] - m["yhat"]) / m["y"]).mean() * 100
+    return (
+        cur["total_amount"].sum(),
+        prev["total_amount"].sum(),
+        cur["customer_id"].nunique(),
+        prev["customer_id"].nunique(),
+        len(cur),
+        len(prev),
+        mape,
+    )
+
 
 k_rev, k_rev_p, k_cust, k_cust_p, k_n, k_n_p, k_mape = _kpis()
 
@@ -30,13 +41,14 @@ st.set_page_config(
     page_title="RetailPulse - AI Analytics Platform",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # ==========================================
 # Custom CSS for a polished, modern look
 # ==========================================
-st.markdown("""
+st.markdown(
+    """
 <style>
     .main-header {
         font-size: 3rem;
@@ -59,13 +71,18 @@ st.markdown("""
         text-align: center;
     }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ==========================================
 # Hero Section
 # ==========================================
 st.markdown('<p class="main-header">📊 RetailPulse</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">AI-Powered Customer Analytics & Demand Forecasting Platform</p>', unsafe_allow_html=True)
+st.markdown(
+    '<p class="sub-header">AI-Powered Customer Analytics & Demand Forecasting Platform</p>',
+    unsafe_allow_html=True,
+)
 st.markdown("---")
 
 # ==========================================
@@ -76,13 +93,28 @@ st.subheader("🚀 Platform Overview")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric(label="Total Revenue (30D)", value=f"${k_rev:,.0f}", delta=f"{(k_rev/k_rev_p-1)*100:+.1f}%")
+    st.metric(
+        label="Total Revenue (30D)",
+        value=f"${k_rev:,.0f}",
+        delta=f"{(k_rev/k_rev_p-1)*100:+.1f}%",
+    )
 with col2:
-    st.metric(label="Active Customers (30D)", value=f"{k_cust:,}", delta=f"{k_cust-k_cust_p:+d}")
+    st.metric(
+        label="Active Customers (30D)",
+        value=f"{k_cust:,}",
+        delta=f"{k_cust-k_cust_p:+d}",
+    )
 with col3:
-    st.metric(label="Forecast MAPE (Prophet, 30D)", value=f"{k_mape:.1f}%", delta="Target: <=12%", delta_color="off")
+    st.metric(
+        label="Forecast MAPE (Prophet, 30D)",
+        value=f"{k_mape:.1f}%",
+        delta="Target: <=12%",
+        delta_color="off",
+    )
 with col4:
-    st.metric(label="Transactions (30D)", value=f"{k_n:,}", delta=f"{(k_n/k_n_p-1)*100:+.1f}%")
+    st.metric(
+        label="Transactions (30D)", value=f"{k_n:,}", delta=f"{(k_n/k_n_p-1)*100:+.1f}%"
+    )
 
 st.markdown("---")
 

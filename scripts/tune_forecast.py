@@ -46,7 +46,9 @@ for cp, mode, monthly in itertools.product(
         m.fit(train)
         scores.append(mape(val["y"].values, m.predict(val[["ds"]])["yhat"].values))
     results.append((float(np.mean(scores)), cp, mode, monthly))
-    print(f"cp={cp} mode={mode} monthly={monthly} -> validation MAPE {np.mean(scores):.2f}")
+    print(
+        f"cp={cp} mode={mode} monthly={monthly} -> validation MAPE {np.mean(scores):.2f}"
+    )
 
 results.sort(key=lambda r: r[0])
 best = results[0]
@@ -63,15 +65,23 @@ print(f"HOLDOUT MAPE (last 30 days, never trained on): {final:.2f}%  (target <= 
 
 with open("models/prophet_model.json", "w") as f:
     f.write(model_to_json(m))
-fc[["ds", "yhat", "yhat_lower", "yhat_upper"]].to_csv("data/forecast_eval.csv", index=False)
+fc[["ds", "yhat", "yhat_lower", "yhat_upper"]].to_csv(
+    "data/forecast_eval.csv", index=False
+)
 with open("reports/forecast_mape.txt", "w") as f:
     f.write(f"{final:.2f}")
 with open("reports/Forecast_Tuning_Results.md", "w") as f:
     f.write("# Prophet tuning results\n\n")
     f.write("Hyperparameters were chosen on two earlier 30-day validation windows.\n")
-    f.write("The final MAPE is measured on the last 30 days, which were never used for training or tuning.\n\n")
-    f.write(f"- Best config: changepoint_prior_scale={best[1]}, seasonality_mode={best[2]}, monthly_seasonality={best[3]}\n")
+    f.write(
+        "The final MAPE is measured on the last 30 days, which were never used for training or tuning.\n\n"
+    )
+    f.write(
+        f"- Best config: changepoint_prior_scale={best[1]}, seasonality_mode={best[2]}, monthly_seasonality={best[3]}\n"
+    )
     f.write(f"- Final holdout MAPE: {final:.2f}% (target <= 12%)\n\n")
     f.write("## Top 5 configs by validation MAPE\n\n")
     for r in results[:5]:
-        f.write(f"- {r[0]:.2f}% (changepoint_prior_scale={r[1]}, mode={r[2]}, monthly={r[3]})\n")
+        f.write(
+            f"- {r[0]:.2f}% (changepoint_prior_scale={r[1]}, mode={r[2]}, monthly={r[3]})\n"
+        )

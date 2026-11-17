@@ -3,3 +3,10 @@ venv/
 __pycache__/
 *.pyc
 lightning_logs/
+mlruns/
+mlflow.db
+lightning_logs/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
