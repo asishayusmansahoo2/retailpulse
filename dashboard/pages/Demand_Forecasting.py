@@ -200,3 +200,10 @@ st.success(f"""
 - Adjusted 30-Day Forecast: **${adjusted_total:,.0f}**
 - Revenue Impact: **${revenue_impact:+,.0f}** ({(revenue_impact/base_total*100):+.1f}%)
 """)
+
+st.download_button(
+    "Download 30-day forecast (CSV)",
+    test_forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]].to_csv(index=False).encode("utf-8"),
+    "forecast_30d.csv",
+    "text/csv",
+)
