@@ -30,11 +30,12 @@ def load_data():
     # Simulate Churn Risk Score based on Segment and Recency
     # (In production, this would be the exact probability from the XGBoost model)
     risk_map = {
-        "Hibernating": 0.85,
-        "At Risk": 0.65,
-        "New Customers": 0.40,
-        "Loyal Customers": 0.15,
-        "Champions": 0.05,
+        'Champions': 0.05,
+        'Loyal Customers': 0.15,
+        'Promising': 0.3,
+        'Slipping Loyalists': 0.45,
+        'At Risk': 0.7,
+        'Hibernating': 0.85
     }
     df["base_risk"] = df["segment"].map(risk_map)
 
