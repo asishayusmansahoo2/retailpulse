@@ -6,7 +6,7 @@ def test_dashboard_exists():
 
 
 def test_pages_exist():
-    assert len(os.listdir("dashboard/pages")) == 4
+    assert len([f for f in os.listdir("dashboard/pages") if f.endswith(".py")]) == 4
 
 
 def test_model_saved():
