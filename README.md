@@ -110,7 +110,3 @@ Kubernetes: `kubectl apply -f k8s/`
 ## Limitations
 
 Data is synthetic. Customer data contains no personal information. The churn AUC target (>= 0.88) and precision@top 20% (>= 0.75) are not met with this data.
-
-## Personal reflection
-
-(Write 3-4 lines in your own words: what you learned, what you would do differently, and your future ideas.)
